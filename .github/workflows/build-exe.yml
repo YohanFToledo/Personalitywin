@@ -1,0 +1,25 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'personalizador_win.py'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build EXE
+        run: |
+          pip install pyinstaller
+          pyinstaller --onefile --windowed --name "PersonalizadorWin" personalizador_win.py
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: PersonalizadorWin
+          path: dist/PersonalizadorWin.exe
